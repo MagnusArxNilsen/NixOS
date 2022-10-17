@@ -1,2 +1,2 @@
 # NixOS
-Config system; reproducible build and deployment.
+System config ; reproducible build and deployment.
