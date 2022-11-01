@@ -7,13 +7,3 @@ services.xserver.desktopManager.gnome.extraGSettingsOverrides = ''
   click-method='default'
 '';
 ```
-
-
-```
-# Enable video drivers support.
-services.xserver.videoDrivers = [
-  "amdgpu"
-  "intel"
-  #"nvidia"
-];
-```
