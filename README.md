@@ -1,4 +1,4 @@
-# NixOS Configs
+# NixOS Configuration
 
 ```
 { config, pkgs, ... };
