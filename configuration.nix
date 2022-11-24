@@ -22,11 +22,11 @@
   };
 
   # Enable Swap on LUKS.
-  boot.initrd.luks.devices."luks-4a254".device = "/dev/disk/by-uuid/4a254";
-  boot.initrd.luks.devices."luks-4a254".keyFile = "/crypto_keyfile.bin";
+  boot.initrd.luks.devices."luks-a25".device = "/dev/disk/by-uuid/a25";
+  boot.initrd.luks.devices."luks-a25".keyFile = "/crypto_keyfile.bin";
   
   # Configure Network
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "nixos";
   networking.networkmanager.enable = true;
 
   # Set your time zone.
@@ -40,46 +40,41 @@
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
 
-  # Configure keymap in X11
+  # Configure keymaps.
+  console.keyMap = "no";
   services.xserver = {
     layout = "no";
-    xkbVariant = "";
   };
-
-  # Configure console keymap
-  console.keyMap = "no";
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
-
+  
+  # Realtime scheduling priority to user processes.
+  security.rtkit.enable = true;
+  
   # Enable sound with pipewire.
   sound.enable = true;
-  hardware.pulseaudio.enable = false;
-  security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
   };
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
+  # Enable touchpad support (touchpad fix Gnome).
+  services.xserver.libinput.enable = true;
+  services.xserver.desktopManager.gnome.extraGSettingsOverrides = ''
+    [org.gnome.desktop.peripherals.touchpad]
+    click-method='default'
+  '';
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # Define a user account. Set passwords with ‘passwd’.
   users.users.magnus = {
     isNormalUser = true;
     description = "Magnus Arneberg";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
-      firefox
-    #  thunderbird
+    #  firefox
     ];
   };
 
@@ -91,24 +86,16 @@
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
   
-  # Right click touchpad fix Gnome.
-  services.xserver.desktopManager.gnome.extraGSettingsOverrides = ''
-    [org.gnome.desktop.peripherals.touchpad]
-    click-method='default'
-  '';
-
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  # List packages installed in system profile. 
+  # Search run: $ nix search package
   environment.systemPackages = with pkgs; [
-  #  vim # The Nano editor is also installed by default.
-  #  wget
+  #  See software-configuration.nix
   ];
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
+  # Some programs need SUID wrappers.
   # programs.mtr.enable = true;
   # programs.gnupg.agent = {
   #   enable = true;
