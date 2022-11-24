@@ -21,30 +21,22 @@
     "/crypto_keyfile.bin" = null;
   };
 
-  # Enable swap on luks
+  # Enable Swap on LUKS.
   boot.initrd.luks.devices."luks-4a254".device = "/dev/disk/by-uuid/4a254";
   boot.initrd.luks.devices."luks-4a254".keyFile = "/crypto_keyfile.bin";
-
+  
+  # Configure Network
   networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Enable networking
   networking.networkmanager.enable = true;
 
   # Set your time zone.
   time.timeZone = "Europe/Oslo";
 
-  # Select internationalisation properties.
+  # Select internationalisation.
   i18n.defaultLocale = "en_US.utf8";
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
   # Enable the GNOME Desktop Environment.
+  services.xserver.enable = true;
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
 
